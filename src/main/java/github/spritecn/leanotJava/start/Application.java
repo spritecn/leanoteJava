@@ -1,19 +1,21 @@
 package github.spritecn.leanotJava.start;
 
 import github.spritecn.leanotJava.controller.TestController;
-import github.spritecn.leanotJava.util.DbUtil;
+import github.spritecn.leanotJava.util.ConfigUtil;
+import github.spritecn.leanotJava.util.DbConnectionFactory;
 
-import static spark.Spark.port;
-import static spark.Spark.staticFiles;
+import java.util.Map;
+
+import static spark.Spark.*;
 
 public class Application {
     public static void main(String[] args) {
-        DbUtil.args = args;
-        DbUtil.init();
-        staticFiles.location("/public");
+        Map<String,String> configMap = ConfigUtil.getConfig(args);
+        DbConnectionFactory.init(configMap);
+        //暂时不需要静态目录
+        //staticFiles.location("/public");
         port(8880);
-        System.out.println(args[0]);
-        System.out.println("11");
+
         new TestController();
     }
 }
