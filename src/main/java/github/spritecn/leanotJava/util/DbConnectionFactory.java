@@ -13,7 +13,6 @@ public class DbConnectionFactory {
     public static void init(Map<String,String> configMap) {
         String dbPath = configMap.get("dbPath");
         //sqlite support
-
         //only support mysql postgresql
         sql2o = new Sql2o(configMap.get("dbPath") , configMap.get("dbUser"), configMap.get("dbPass"));
         sql2o.open().close();
