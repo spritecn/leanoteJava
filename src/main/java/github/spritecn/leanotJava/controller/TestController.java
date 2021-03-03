@@ -12,7 +12,7 @@ public class TestController extends BaseController{
     public TestController(){
         get("/hello", (request, response) -> {
             Map<String,String> map = new HashMap<>();
-            map.put("hello","world");
+            map.put("hello", "word");
             return GsonUtil.gson.toJson(map);
         });
 
