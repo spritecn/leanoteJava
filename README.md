@@ -1,5 +1,5 @@
 # leanoteJava
-基于leanote服务端布署相对比较难，难点主要在mongodb的资源和配置， 且官方已2年未进行维护，开设此项目
+java + DBMS的leanote后端
 
 # 愿景
 - 支持sqlite,mysql,postgreSql 等关系数据库，降低布署和数据理备份处理难度
