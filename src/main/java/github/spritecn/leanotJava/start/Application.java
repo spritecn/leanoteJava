@@ -1,6 +1,6 @@
 package github.spritecn.leanotJava.start;
 
-import github.spritecn.leanotJava.controller.TestController;
+import github.spritecn.leanotJava.controller.ApiController;
 import github.spritecn.leanotJava.util.ConfigUtil;
 import github.spritecn.leanotJava.util.DbConnectionFactory;
 
@@ -16,6 +16,6 @@ public class Application {
         //staticFiles.location("/public");
         port(8880);
 
-        new TestController();
+        new ApiController();
     }
 }
