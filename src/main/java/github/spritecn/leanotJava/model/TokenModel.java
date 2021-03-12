@@ -2,7 +2,9 @@ package github.spritecn.leanotJava.model;
 
 import github.spritecn.leanotJava.util.TimeUtil;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class TokenModel extends BaseModel{
     private String token;

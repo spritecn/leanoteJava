@@ -10,7 +10,7 @@ import static spark.Spark.*;
 public class ApiController {
 
     public ApiController() {
-        new AuthApi();
+        AuthApi authApi = new AuthApi();
         path("/api",
             () -> {
                 before("/*", (req, res) -> {
@@ -18,6 +18,7 @@ public class ApiController {
                     String token = req.queryParams("token");
                     //api 全局校验token
                     if (StringUtils.isBlank(token) || token.length() < 5) halt(400);
+                    if(!authApi.checkToken(token)) halt(400);
                 });
                 after("/*", (req, res) -> {
                     //APi全局返回 json

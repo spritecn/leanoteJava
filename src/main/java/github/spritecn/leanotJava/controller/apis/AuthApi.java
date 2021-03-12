@@ -13,6 +13,7 @@ import static spark.Spark.*;
 
 public class AuthApi {
     UserService userService =new UserService();
+    private final String FIRST_USER_TOKEN_PREFIX = "user";
     public static Route login;
 
     public AuthApi(){
@@ -25,5 +26,16 @@ public class AuthApi {
             }
             return userService.login(email,pwd);
         };
+    }
+
+    //检查token是否合法
+    public boolean checkToken(String token){
+        if(isFirstUser(token)) return true;
+        return userService.checkToken(token);
+    }
+
+    boolean isFirstUser(String token){
+        return token.startsWith("FIRST_USER_TOKEN_PREFIX")
+                && StringUtils.isNumeric(token.substring(FIRST_USER_TOKEN_PREFIX.length()));
     }
 }

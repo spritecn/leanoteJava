@@ -12,7 +12,7 @@ class SqlGeneratorTest extends Specification {
         given:
         def user = new UserModel();
         user.setEmail("test@qq.com")
-        user.setDeleted(true)
+        user.setIsDeleted(true)
         user.setId(1L)
         when:
         def sql = SqlGenerator.genDefaultUpdateByIdSql(user,"leanote_user")
@@ -21,12 +21,11 @@ class SqlGeneratorTest extends Specification {
         StringUtils.isNotBlank(sql)
     }
 
-    @Ignore
     def "test genDefaultInsertByModelSql"(){
         given:
         def user = new UserModel();
         user.setEmail("test@qq.com")
-        user.setDeleted(true)
+        user.setIsDeleted(true)
         user.setId(1L)
         user.setCreatedTime((System.currentTimeMillis()/1000L as BigDecimal).longValue())
         when:

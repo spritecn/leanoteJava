@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 public class UserService {
-    private static  final String USER = "user";
     private static final UserDao userDao = new UserDao();
     private static final TokenDao tokenDao = new TokenDao();
 
@@ -45,13 +44,11 @@ public class UserService {
         return result;
     }
 
-
-
-
-    //根据token判断 是不是第一次登录
-    static boolean checkFirstLogin(String token){
-        if(!StringUtils.startsWith(token,"user")) return false;
-        return StringUtils.isNumeric(token.substring(USER.length()));
+    public boolean checkToken(String token){
+        return Objects.nonNull(tokenDao.getByToken(token));
     }
+
+
+
 
 }

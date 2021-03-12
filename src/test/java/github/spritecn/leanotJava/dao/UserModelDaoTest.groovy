@@ -39,7 +39,7 @@ class UserModelDaoTest extends Specification {
         given:
             def user = new UserModel();
             user.setEmail("test@qq.com")
-            user.setDeleted(true)
+            user.setIsDeleted(true)
             user.setId(1L)
         when:
             userDao.updateById(user)
