@@ -5,17 +5,24 @@ import github.spritecn.leanotJava.model.TokenModel;
 
 import java.util.List;
 
-public class TokenDao extends BaseDao implements BaseInterface<TokenModel> {
+public class TokenDao extends BaseDao implements BaseDaoInterface<TokenModel> {
     private final String TABLE_NAME = "leanote_token";
+
     @Override
-    public TokenModel getById(Long id) {
-        String sql = SqlGenerator.genDefaultSelectByIdSql(TokenModel.class,TABLE_NAME);
+    public TokenModel getById(String id) {
+        String sql = SqlGenerator.genDefaultSelectByUIdSql(TokenModel.class,TABLE_NAME);
         return conn.createQuery(sql).addParameter("id",id).executeAndFetchFirst(TokenModel.class);
+    }
+
+    @Override
+    public TokenModel getByUId(String uId) {
+        String sql = SqlGenerator.genDefaultSelectByUIdSql(TokenModel.class,TABLE_NAME);
+        return conn.createQuery(sql).addParameter("uId",uId).executeAndFetchFirst(TokenModel.class);
     }
 
     public TokenModel getByToken(String token) {
         String sql = SqlGenerator.genDefaultSelectSqlWithWhere(TokenModel.class,TABLE_NAME);
-        sql += "token = :token";
+        sql += "uId = :token";
         return conn.createQuery(sql).addParameter("token",token).executeAndFetchFirst(TokenModel.class);
     }
 

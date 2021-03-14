@@ -9,7 +9,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UserModel extends BaseModel {
-    private String userId;
     private String  email;
     private String pwd;
     private String username;

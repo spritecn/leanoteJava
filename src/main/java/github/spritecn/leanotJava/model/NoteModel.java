@@ -8,8 +8,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class NoteModel extends BaseModel {
-    String type;
+    //名称
     String title;
+    String userId;
     String notebookId;
     String content;
     Boolean isMarkdown;

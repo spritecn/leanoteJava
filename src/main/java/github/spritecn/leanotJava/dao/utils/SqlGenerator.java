@@ -3,6 +3,7 @@ package github.spritecn.leanotJava.dao.utils;
 import com.google.gson.reflect.TypeToken;
 import github.spritecn.leanotJava.model.BaseModel;
 import github.spritecn.leanotJava.util.GsonUtil;
+import github.spritecn.leanotJava.util.TimeUtil;
 import spark.utils.StringUtils;
 
 import java.math.BigDecimal;
@@ -19,6 +20,10 @@ public class SqlGenerator {
      */
     public static  <T extends BaseModel> String genDefaultSelectByIdSql(Class<T> tClass, String tableName){
         return genDefaultSelectSql(tClass,tableName) + " where id= :id";
+    }
+
+    public static  <T extends BaseModel> String genDefaultSelectByUIdSql(Class<T> tClass, String tableName){
+        return genDefaultSelectSql(tClass,tableName) + " where uId= :uId";
     }
 
     public static  <T extends BaseModel> String genDefaultListAllSql(Class<T> tClass, String tableName){
@@ -49,11 +54,22 @@ public class SqlGenerator {
         return genDefaultUpdateSqlWithWhere(model,tableName) + "id = " + model.getId().toString();
     }
 
+    public static  <T extends BaseModel> String genDefaultUpdateByUIdSql(T model,String tableName){
+        if(Objects.isNull(model.getId())){
+            throw new Error("id must not be null");
+        }
+        return genDefaultUpdateSqlWithWhere(model,tableName) + "uId = " + model.getUId().toString();
+    }
+
     //根据model生成insert sql
     //        //INSERT INTO "main"."leanote_user" ("id", "UserId", "Email", "Pwd", "Username", "CreatedTime", "UpdatedTime", "IsDeleted", "LastUsn", "ROWID") VALUES (1, '40C35EBECAB5C', 'admin@admin.com', '21232f297a57a5a743894a0e4a801fc3', NULL, 1615033835, NULL, 0, NULL, 1);
     public static  <T extends BaseModel> String genDefaultInsertByModelSql(T model,String tableName){
-        String jsonStr = GsonUtil.gsonWithNull.toJson(model);
-        Map<String,Object> jsonMap = GsonUtil.gsonWithNull.fromJson(jsonStr, new TypeToken<LinkedHashMap<String,Object>>(){}.getType());
+        //插入时间
+        if(Objects.isNull(model.getCreatedTime())){
+            model.setCreatedTime(TimeUtil.genTimeStampSecond());
+        }
+        String jsonStr = GsonUtil.gson.toJson(model);
+        Map<String,Object> jsonMap = GsonUtil.gson.fromJson(jsonStr, new TypeToken<LinkedHashMap<String,Object>>(){}.getType());
         List<String> columns = new ArrayList<>(); //要更新的列
         List<String> values= new ArrayList<>();
         jsonMap.entrySet().forEach(x-> {
@@ -69,10 +85,10 @@ public class SqlGenerator {
         return "insert into " + tableName + "(" + keyStr +") " + "values (" + valueStr + ")";
     }
 
-    //update tablename set a = "a",b = "b" where
+    //update tableName set a = "a",b = "b" where
     public static  <T extends BaseModel> String genDefaultUpdateSqlWithWhere(T model,String tableName){
-        String jsonStr = GsonUtil.gsonWithNull.toJson(model);
-        Map<String,Object> jsonMap = GsonUtil.gsonWithNull.fromJson(jsonStr, new TypeToken<LinkedHashMap<String,Object>>(){}.getType());
+        String jsonStr = GsonUtil.gson.toJson(model);
+        Map<String,Object> jsonMap = GsonUtil.gson.fromJson(jsonStr, new TypeToken<LinkedHashMap<String,Object>>(){}.getType());
         String keyEqualsValueStr = jsonMap.entrySet().stream()
                 .filter(x->Objects.nonNull(x.getValue())) //去除null列
                 .filter(x->!Objects.equals(x.getKey(),"id"))//去除id列

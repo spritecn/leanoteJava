@@ -4,8 +4,9 @@ import github.spritecn.leanotJava.model.BaseModel;
 
 import java.util.List;
 
-public interface BaseInterface<T extends BaseModel> {
-    T getById(Long id);
+public interface BaseDaoInterface<T extends BaseModel> {
+    T getById(String  id);
+    T getByUId(String  uId);
     List<T> ListAll();
     int updateById(T model);
     Long insertAndReturnId(T model);

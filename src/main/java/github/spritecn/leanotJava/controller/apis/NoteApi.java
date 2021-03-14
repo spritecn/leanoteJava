@@ -1,31 +1,41 @@
 package github.spritecn.leanotJava.controller.apis;
 
+import github.spritecn.leanotJava.model.NoteModel;
+import github.spritecn.leanotJava.service.NoteService;
 import github.spritecn.leanotJava.service.UserService;
+import github.spritecn.leanotJava.util.BooleanUtil;
 import org.apache.commons.lang3.StringUtils;
+import spark.Request;
 import spark.Route;
 
 
 public class NoteApi {
-    UserService userService =new UserService();
+    private NoteService noteService = new NoteService();
     public static Route addNote;
+    public static Route updateNote;
+    public static Route deleteNote;
 
     public NoteApi(){
         addNote = (req,res) ->{
-            String title = req.queryParams("Title");
-            String notebookId = req.queryParams("NotebookId");
-            String content = req.queryParams("Content");
-            String IsMarkdown = req.queryParams("isMarkdown");
-            String tags = req.queryParams("Tags");
-            String isBlog = req.queryParams("IsBlog");
-            String updatedTime = req.queryParams("UpdatedTime");
-            String createdTime = req.queryParams("CreatedTime");
-            String isTrash = req.queryParams("IsTrash");
-            String isDeleted = req.queryParams("IsDeleted");
-            String usn = req.queryParams("Usn");
-            //"Files":[{"FileId":"6049778146874c0ce8000518","LocalFileId":"60497733e4857224cd000000","Type":"png","Title":"test","HasBody":true,"IsAttach":true}]
-            String files = req.queryParams("Files");
-            return null;
+            NoteModel noteModel = req2NoteModel(req);
+            return noteService.addNote(noteModel);
         };
+    }
+
+    NoteModel req2NoteModel(Request req){
+        NoteModel noteModel = new NoteModel();
+        noteModel.setTitle(req.queryParams("Title"));
+        noteModel.setUserId(req.attribute("userId"));
+        noteModel.setNotebookId(req.queryParams("NotebookId"));
+        noteModel.setContent(req.queryParams("Content"));
+        noteModel.setIsMarkdown(BooleanUtil.covertString2Boolean(req.queryParams("isMarkdown")));
+        noteModel.setTags(req.queryParams("Tags"));
+        noteModel.setIsBlog(BooleanUtil.covertString2Boolean(req.queryParams("IsBlog")));
+        noteModel.setIsTrash(BooleanUtil.covertString2Boolean(req.queryParams("IsTrash")));
+        noteModel.setFiles(req.queryParams("Files"));
+        //不需要客户端的usn
+        //noteModel = req.queryParams("Usn");
+        return noteModel;
     }
 
 

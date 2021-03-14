@@ -8,7 +8,6 @@ import java.util.stream.LongStream
 
 @Slf4j
 class IdGeneratorTest extends Specification {
-
     def "GenId"() {
         given:
             Set<String> set = new TreeSet<>()
@@ -17,7 +16,7 @@ class IdGeneratorTest extends Specification {
         when:
             LongStream.range(0,count).forEach(x-> {
                 String id = IdGenerator.genId();
-                //log.info(id);
+                log.info(id);
                 if(!set.add(id)) log.info("{}---repeat---",x)
             })
         then:

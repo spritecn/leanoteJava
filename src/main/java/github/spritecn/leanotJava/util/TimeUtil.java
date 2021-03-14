@@ -6,8 +6,8 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 public class TimeUtil {
-    public static final String UTC_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    public static final TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("UTC");
+    private static final String UTC_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    private static final TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("UTC");
     //获取秒级时间戳
     public static  long genTimeStampSecond(){
         return System.currentTimeMillis()/1000;
@@ -15,6 +15,13 @@ public class TimeUtil {
 
     public static  long genTimeStampSecond(Date date){
         return date.getTime()/1000;
+    }
+
+    //获取utc时间字串
+    public static String getUtcTimeStr(Long timeStampSecond) {
+        Date date = new Date(timeStampSecond*1000);
+        SimpleDateFormat df = new SimpleDateFormat(UTC_TIME_PATTERN);
+        return df.format(date);
     }
 
     //获取utc时间字串

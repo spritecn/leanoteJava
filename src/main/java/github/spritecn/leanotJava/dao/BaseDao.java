@@ -7,7 +7,6 @@ import java.util.Objects;
 
 public class BaseDao {
     Connection conn = null;
-    Connection transactionConn = null;
     public BaseDao(){
         this.conn = DbConnectionFactory.getConnection();
     }
@@ -17,9 +16,6 @@ public class BaseDao {
         try {
             if (Objects.nonNull(conn)) {
                 conn.close();
-            }
-            if (Objects.nonNull(transactionConn)) {
-                transactionConn.close();
             }
         }catch (Exception e){
             //pass
