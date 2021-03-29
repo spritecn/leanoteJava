@@ -20,7 +20,7 @@ public class CategoryService {
     private static final CategoryDao categoryDao = new CategoryDao();
     private final UserService userService =  UserService.newInstance();
 
-    public BaseResponse addCategory(String title, String parentId, String userId,CategoryTypeEnum type){
+    public BaseResponse addCategory( String title, String parentId, String userId,CategoryTypeEnum type){
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.setTitle(title);
         categoryModel.setParentId(parentId);

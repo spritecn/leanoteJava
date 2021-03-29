@@ -8,6 +8,7 @@ import github.spritecn.leanotJava.dao.CategoryDao;
 import github.spritecn.leanotJava.dao.NoteDao;
 import github.spritecn.leanotJava.model.CategoryModel;
 import github.spritecn.leanotJava.model.NoteModel;
+import github.spritecn.leanotJava.util.BooleanUtil;
 import github.spritecn.leanotJava.util.IdGenerator;
 import github.spritecn.leanotJava.util.TimeUtil;
 import org.apache.commons.lang3.ArrayUtils;
@@ -27,14 +28,15 @@ public class NoteService {
         String uId = IdGenerator.genId();
         Date now = new Date();
         noteModel.setCreatedTime(TimeUtil.genTimeStampSecond(now));
+        //TODO:uid需要用客户端的
         noteModel.setUId(uId);
         //TODO:token LastSync处理
         //需要客户端的usn,来判断是否和服务端usn匹配，判断客户端是重橷同步
 
         //获取usn
-        Integer  usn = userService.getUsn(noteModel.getUId());
+        Integer  usn = userService.getUsn(noteModel.getUserId());
         noteModel.setUsn(usn);
-        if(noteModel.getIsBlog()){
+        if(BooleanUtil.isTrue(noteModel.getIsBlog())){
             noteModel.setPublicTime(noteModel.getCreatedTime());
         }
 

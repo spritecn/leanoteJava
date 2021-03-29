@@ -18,4 +18,8 @@ public class BooleanUtil {
         }
         return Objects.equals(str, TRUE_LOW) || Objects.equals(str, TRUE_SUP);
     }
+
+    public static  boolean isTrue(Boolean obj){
+        return Objects.nonNull(obj) && obj;
+    }
 }

@@ -23,7 +23,7 @@ public class DbConnectionFactory {
     }
 
     public static Connection getTransactionConnection() {
-        return sql2o.beginTransaction();
+        return sql2o.beginTransaction(java.sql.Connection.TRANSACTION_SERIALIZABLE);
     }
 
 

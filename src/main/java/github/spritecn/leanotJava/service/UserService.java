@@ -58,7 +58,8 @@ public class UserService {
         Long timeStamp = TimeUtil.genTimeStampSecond();
         SyncStateResponse response = new SyncStateResponse();
         response.setLastSyncTime(timeStamp);
-        response.setLastSyncUsn(tokenModel.getLastSyncUsn());
+        Integer lastSyncUsn = tokenModel.getLastSyncUsn();
+        response.setLastSyncUsn(Objects.nonNull(lastSyncUsn)?lastSyncUsn:-1);
 
         tokenModel.setLastSyncTime(timeStamp);
         tokenModel.setUpdatedTime(timeStamp);

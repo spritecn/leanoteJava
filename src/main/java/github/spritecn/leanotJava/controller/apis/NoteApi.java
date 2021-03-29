@@ -41,7 +41,7 @@ public class NoteApi {
         noteModel.setIsTrash(BooleanUtil.covertString2Boolean(req.queryParams("IsTrash")));
         noteModel.setFiles(req.queryParams("Files"));
 
-        noteModel.setUsn(Integer.valueOf(req.queryParams("Usn")));
+        //noteModel.setUsn(Integer.valueOf(req.queryParams("Usn")));
         return noteModel;
     }
 

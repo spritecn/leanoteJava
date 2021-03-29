@@ -51,7 +51,7 @@ public class UserDao extends BaseDao implements BaseDaoInterface<UserModel> {
     public Integer getUsn(String uId) {
         //用事务
         Connection   transactionConn = DbConnectionFactory.getTransactionConnection();
-        String selectSql = SqlGenerator.genDefaultSelectByUIdSql(TokenModel.class,TABLE_NAME);
+        String selectSql = SqlGenerator.genDefaultSelectByUIdSql(UserModel.class,TABLE_NAME);
         UserModel userModel = transactionConn.createQuery(selectSql).addParameter("uId",uId).executeAndFetchFirst(UserModel.class);
         Integer newUsn = Objects.nonNull(userModel.getLastUsn())?userModel.getLastUsn() + 1:1;
         UserModel updateModel = new UserModel();
