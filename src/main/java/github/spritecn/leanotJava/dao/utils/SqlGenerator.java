@@ -30,6 +30,42 @@ public class SqlGenerator {
         return genDefaultSelectSql(tClass,tableName);
     }
 
+    public static  <T extends BaseModel> String genListByModelAndExtendConditionAndLimit(T model, String tableName,String extendCondition,Integer count,Integer offset){
+        String sqlStr = genDefaultListByModel(model,tableName);
+        if(Objects.nonNull(extendCondition)){
+            String linkStr = sqlStr.endsWith(")")?" and ":" where ";
+            sqlStr = sqlStr + linkStr + extendCondition;
+        }
+        return Objects.nonNull(count)?addLimitOnSqlStr(sqlStr,count,offset):sqlStr;
+    }
+
+    public static String addLimitOnSqlStr(String sqlStr,Integer count,Integer offset){
+        if(Objects.isNull(offset)) return sqlStr +  " limit " + count.toString();
+        return sqlStr + " limit " + offset.toString() + "," + count.toString();
+    }
+
+
+
+    public static  <T extends BaseModel> String genDefaultListByModel(T model, String tableName){
+        String defaultSelectStr = "select * from " + tableName;
+        if(Objects.isNull(model)) return defaultSelectStr + "where (isDeleted = 0)";
+        if(Objects.isNull(model.getIsDeleted())) model.setIsDeleted(false);
+        String jsonStr = GsonUtil.gson.toJson(model);
+        Map<String,Object> jsonMap = GsonUtil.gson.fromJson(jsonStr, new TypeToken<LinkedHashMap<String,Object>>(){}.getType());
+        List<String> whereList = new ArrayList<>();
+        jsonMap.forEach((key, value) -> {
+            if (Objects.isNull(value)) return; //
+            whereList.add(key + "=" + genValueString(value));
+        });
+        String whereStr = null;
+        //需要用括号包裹便于后面添加and or
+        if(!whereList.isEmpty()) whereStr = " where (" + String.join(" and  ", whereList) + ")";
+        if(Objects.nonNull(whereStr)){
+            return defaultSelectStr + whereStr;
+        }
+        return defaultSelectStr;
+    }
+
     public static  <T extends BaseModel> String genDefaultSelectSql(Class<T> tClass, String tableName){
         String columnsStr = getColumnsStr( tClass);
         return  "select " + columnsStr +
@@ -55,10 +91,10 @@ public class SqlGenerator {
     }
 
     public static  <T extends BaseModel> String genDefaultUpdateByUIdSql(T model,String tableName){
-        if(Objects.isNull(model.getId())){
-            throw new Error("id must not be null");
+        if(Objects.isNull(model.getUId())){
+            throw new Error("uid must not be null");
         }
-        return genDefaultUpdateSqlWithWhere(model,tableName) + "uId = " + model.getUId().toString();
+        return genDefaultUpdateSqlWithWhere(model,tableName) + "uId = " + model.getUId();
     }
 
     //根据model生成insert sql
@@ -110,7 +146,7 @@ public class SqlGenerator {
         if(o instanceof BigDecimal){
             return ((BigDecimal) o).toPlainString();
         }
-        //由于JSON会将所有的Number类转为double，所以需要先转long再获取
+        //由于JSON会将所有的Number类转为double，所以需要先转long再获取,应该用不到小数
         return  (o instanceof Number)?String.valueOf (((Number) o).longValue()):"'" + o.toString() + "'";
     }
 

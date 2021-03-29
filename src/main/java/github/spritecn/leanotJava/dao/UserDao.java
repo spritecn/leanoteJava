@@ -4,6 +4,7 @@ import github.spritecn.leanotJava.dao.utils.SqlGenerator;
 import github.spritecn.leanotJava.model.TokenModel;
 import github.spritecn.leanotJava.model.UserModel;
 import github.spritecn.leanotJava.util.DbConnectionFactory;
+import github.spritecn.leanotJava.util.TimeUtil;
 import org.sql2o.Connection;
 
 import java.sql.SQLException;
@@ -59,5 +60,14 @@ public class UserDao extends BaseDao implements BaseDaoInterface<UserModel> {
         transactionConn.createQuery(SqlGenerator.genDefaultUpdateByIdSql(updateModel,TABLE_NAME)).executeUpdate().getResult();
         transactionConn.commit(true);
         return newUsn;
+    }
+
+    public void updateTokenSync(String token,Integer usn){
+        TokenModel model = new TokenModel();
+        model.setUId(token);
+        model.setLastSyncUsn(usn);
+        model.setLastSyncTime(TimeUtil.genTimeStampSecond());
+        conn.createQuery(SqlGenerator.genDefaultUpdateByUIdSql(model,TABLE_NAME)).executeUpdate().getResult();
+
     }
 }

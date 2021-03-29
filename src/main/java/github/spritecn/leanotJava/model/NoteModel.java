@@ -18,7 +18,6 @@ public class NoteModel extends BaseModel {
     String files;
     Boolean isBlog;
     Boolean isTrash;
-    Boolean isDeleted;
     Integer usn;
     Long publicTime;
 }

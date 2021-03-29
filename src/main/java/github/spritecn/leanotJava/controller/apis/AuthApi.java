@@ -3,13 +3,10 @@ package github.spritecn.leanotJava.controller.apis;
 import github.spritecn.leanotJava.model.TokenModel;
 import github.spritecn.leanotJava.service.UserService;
 import org.apache.commons.lang3.StringUtils;
-import spark.QueryParamsMap;
 import spark.Route;
 
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import static spark.Spark.*;
 
@@ -34,7 +31,7 @@ public class AuthApi {
     public String getUserIdByToken(String token){
         boolean firstUserFlag = isFirstUser(token);
         if(firstUserFlag) return token;
-        TokenModel tokenModel = userService.getUserByTOken(token);
+        TokenModel tokenModel = userService.getUserByToken(token);
         if(Objects.isNull(tokenModel)) return null;
         return tokenModel.getUserId();
     }

@@ -14,7 +14,9 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class NoteService {
     private static final NoteDao noteDao = new NoteDao();
@@ -26,15 +28,25 @@ public class NoteService {
         Date now = new Date();
         noteModel.setCreatedTime(TimeUtil.genTimeStampSecond(now));
         noteModel.setUId(uId);
+        //TODO:token LastSync处理
+        //需要客户端的usn,来判断是否和服务端usn匹配，判断客户端是重橷同步
+
         //获取usn
         Integer  usn = userService.getUsn(noteModel.getUId());
         noteModel.setUsn(usn);
         if(noteModel.getIsBlog()){
             noteModel.setPublicTime(noteModel.getCreatedTime());
         }
+
+
         //TODO:附件文件处理
         noteDao.insertAndReturnId(noteModel);
         return noteModel2NotebookResponse(noteModel);
+    }
+
+    public List<BaseResponse> getSyncNotes(String userId, Integer afterUsn){
+        List<NoteModel> noteModelList = noteDao.ListByUserIdAfterUsn(userId,afterUsn);
+        return noteModelList.stream().map(x->noteModel2NotebookResponse(x)).collect(Collectors.toList());
     }
 
     NoteResponse noteModel2NotebookResponse(NoteModel noteModel){

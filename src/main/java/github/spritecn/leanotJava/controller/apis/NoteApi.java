@@ -14,11 +14,18 @@ public class NoteApi {
     public static Route addNote;
     public static Route updateNote;
     public static Route deleteNote;
+    public static Route getSyncNote;
+
 
     public NoteApi(){
         addNote = (req,res) ->{
             NoteModel noteModel = req2NoteModel(req);
             return noteService.addNote(noteModel);
+        };
+        getSyncNote = (req,res) ->{
+            Integer afterUsn = Integer.parseInt(req.queryParams("afterUsn"));
+            String userId = req.attribute("userId");
+            return noteService.getSyncNotes(userId,afterUsn);
         };
     }
 
@@ -33,8 +40,8 @@ public class NoteApi {
         noteModel.setIsBlog(BooleanUtil.covertString2Boolean(req.queryParams("IsBlog")));
         noteModel.setIsTrash(BooleanUtil.covertString2Boolean(req.queryParams("IsTrash")));
         noteModel.setFiles(req.queryParams("Files"));
-        //不需要客户端的usn
-        //noteModel = req.queryParams("Usn");
+
+        noteModel.setUsn(Integer.valueOf(req.queryParams("Usn")));
         return noteModel;
     }
 

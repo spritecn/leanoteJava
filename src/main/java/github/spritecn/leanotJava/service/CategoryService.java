@@ -8,8 +8,13 @@ import github.spritecn.leanotJava.model.CategoryModel;
 import github.spritecn.leanotJava.util.IdGenerator;
 import github.spritecn.leanotJava.util.TimeUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+
+import static github.spritecn.leanotJava.constant.CategoryTypeEnum.NoteBook;
+import static github.spritecn.leanotJava.constant.CategoryTypeEnum.Tag;
 
 public class CategoryService {
     private static final CategoryDao categoryDao = new CategoryDao();
@@ -30,7 +35,7 @@ public class CategoryService {
         NotebookResponse response = new NotebookResponse();
         response.setOk(true);
         response.setCreatedTime(TimeUtil.getUtcTimeStr(now));
-        if(Objects.equals(type,CategoryTypeEnum.NoteBook)) {
+        if(Objects.equals(type, NoteBook)) {
             response.setNotebookId(uId);
         }else {
             response.setTagId(uId);
@@ -38,6 +43,23 @@ public class CategoryService {
         response.setTitle(title);
         response.setUsn(usn);
         return response;
+    }
+
+
+    List<BaseResponse> getSyncNotebooksOrTags(String userId,Integer afterUsn,CategoryTypeEnum categoryType){
+        //TODO 同步分类和标签
+        List<CategoryModel> categoryModelList;
+        /*
+        if(Objects.equals(categoryType,NoteBook){
+                categoryModelList = categoryDao.getSyncNotebook(String userId,Integer afterUsn);
+        }
+        if(Objects.equals(categoryType,Tag){
+            categoryModelList = categoryDao.getSyncTags(String userId,Integer afterUsn);
+        }
+         */
+
+        return null;
+
     }
 
     public BaseResponse delNotebook(String notebookId){

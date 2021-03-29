@@ -2,6 +2,7 @@ package github.spritecn.leanotJava.service;
 
 import github.spritecn.leanotJava.bean.BaseResponse;
 import github.spritecn.leanotJava.bean.BaseResponseInterface;
+import github.spritecn.leanotJava.bean.SyncStateResponse;
 import github.spritecn.leanotJava.bean.UserResponse;
 import github.spritecn.leanotJava.dao.TokenDao;
 import github.spritecn.leanotJava.dao.UserDao;
@@ -9,6 +10,7 @@ import github.spritecn.leanotJava.model.TokenModel;
 import github.spritecn.leanotJava.model.UserModel;
 import github.spritecn.leanotJava.util.IdGenerator;
 import github.spritecn.leanotJava.util.Md5Util;
+import github.spritecn.leanotJava.util.TimeUtil;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -51,11 +53,31 @@ public class UserService {
         return result;
     }
 
-    public TokenModel getUserByTOken(String token){
-        return tokenDao.getByToken(token);
+    public SyncStateResponse getSyncState(String token){
+        TokenModel tokenModel = getUserByToken(token);
+        Long timeStamp = TimeUtil.genTimeStampSecond();
+        SyncStateResponse response = new SyncStateResponse();
+        response.setLastSyncTime(timeStamp);
+        response.setLastSyncUsn(tokenModel.getLastSyncUsn());
+
+        tokenModel.setLastSyncTime(timeStamp);
+        tokenModel.setUpdatedTime(timeStamp);
+        tokenModel.setLastSyncUsn(null);
+        tokenDao.updateById(tokenModel);
+        return response;
     }
 
 
+    public TokenModel getUserByToken(String token){
+        return tokenDao.getByToken(token);
+    }
+
+    //更新token的同步时间和usn
+    public synchronized void updateTokenSync(String token,Integer usn){
+        userDao.updateTokenSync(token,usn);
+    }
+
+    //获取usn
     public synchronized Integer getUsn(String userId){
        return userDao.getUsn(userId);
     }
